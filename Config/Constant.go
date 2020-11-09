@@ -13,4 +13,6 @@ const (
 	Host = "39.107.119.52"
 	Port = 3306
 	DbName = "PrintYun"
+
+	JwtSECRET = "XishngPrintYun"
 )
