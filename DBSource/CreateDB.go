@@ -4,17 +4,12 @@ import (
 	"PrintYun/Config"
 	"PrintYun/DBSource/Modules"
 	"fmt"
-	"github.com/casbin/casbin"
-	"github.com/casbin/gorm-adapter"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 var db *gorm.DB
 var DRIVER string
-var PO *gormadapter.Adapter
-var Enforcer *casbin.Enforcer
-var err error
 
 func DBConnect()  {
 	DRIVER = fmt.Sprintf("%s:%s@(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", Config.MyUser,Config.Password, Config.Host, Config.Port, Config.DbName)
@@ -26,7 +21,6 @@ func DBConnect()  {
 	}
 	db.SingularTable(true)
 	CheckTableExist()				// 检查数据表存在情况
-	//CreateAuthority()   			// casbin增加权限表
 }
 
 func GetDB() *gorm.DB {
@@ -100,25 +94,5 @@ func CheckTableExist()  {
 		db.Model(&Modules.Order{}).AddForeignKey("shop_id", "shop(id)", "RESTRICT", "RESTRICT")
 	}else{
 		fmt.Println("Admin Order has exist~~")
-	}
-}
-
-// 权限验证
-func CreateAuthority()  {
-	// 将数据库连接同步给插件， 插件用来操作数据库
-	PO = gormadapter.NewAdapterByDB(db)
-	// 这里也可以使用原生字符串方式
-	///home/xishng/文档/PrintYun/DBSource/rbac_model.conf
-	Enforcer = casbin.NewEnforcer("DBSource/rbac_model.conf", PO)
-	if err != nil {
-		fmt.Sprintf("Happen a error: %v", err)
-	}
-	// 开启权限认证日志
-	Enforcer.EnableLog(true)
-	// 加载数据库中的策略
-	err = Enforcer.LoadPolicy()
-	if err != nil {
-		fmt.Println("loadPolicy error")
-		panic(err)
 	}
 }

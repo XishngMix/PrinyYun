@@ -1,10 +1,15 @@
 package Services
 
 import (
+	"PrintYun/Router/v1/Services/WebRoute"
+	"PrintYun/Router/v1/Services/WechatRoute"
 	"github.com/kataras/iris/v12"
-	"PrintYun/Router/v1/View"
 )
 
-func UserService(UserParty iris.Party)  {
-	UserParty.Post("/sendwxcode", View.WechatLogin)
+func WechatService(WechatParty iris.Party)  {
+	WechatParty.PartyFunc("/user", WechatRoute.User)
+}
+
+func WebService(WebParty iris.Party)  {
+	WebParty.PartyFunc("/user", WebRoute.User)
 }

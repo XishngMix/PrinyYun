@@ -4,15 +4,6 @@ import (
 	_ "github.com/jinzhu/gorm"
 )
 
-type Admin struct {
-	Id int `gorm:"AUTO_INCREMENT;primary_key"`
-	UserName string `gorm:"type:varchar(32);not null"`   	// 用户名
-	PassWord string `gorm:"type:varchar(64);not null"` 		// 密码
-	Root int
-	SignTime int64 `gorm:"autoCreateTime"`
-	SystemAuthority int `gorm:"not null"`   				// 商户权限
-	InviteCode string `gorm:"type:varchar(16);not null;unique"`
-}
 
 type User struct {
 	Id int `gorm:"AUTO_INCREMENT;primary_key"`
@@ -24,4 +15,14 @@ type User struct {
 	StatisticsTimes int `gorm:"type:int(16);default:0"`     // 使用次数
 	Shop []Shop `gorm:"foreignKey:UserId"`					// 关联Shop表，建立外键
 	Order []Order `gorm:"foreignKey:UserId"`				// 关联Order表，建立外键
+}
+
+type Admin struct {
+		Id int `gorm:"AUTO_INCREMENT;primary_key"`
+		UserName string `gorm:"type:varchar(32);not null;unique"`   	// 用户名, 注册使用手机号
+		PassWord string `gorm:"type:varchar(64);not null"` 				// 密码
+		Root int
+		SignTime int64 `gorm:"autoCreateTime"`
+		SystemAuthority int `gorm:"not null"`   						// 商户权限
+		InviteCode string `gorm:"type:varchar(16);not null;unique"`
 }
